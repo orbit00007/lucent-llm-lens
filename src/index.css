@@ -38,22 +38,22 @@ All colors MUST be HSL.
 
     --radius: 0.75rem;
 
-    /* Brand Intelligence Colors */
-    --success: 142 71% 45%;
+    /* Professional Analytics Colors */
+    --success: 134 61% 41%;
     --success-foreground: 0 0% 100%;
-    --success-light: 142 71% 95%;
+    --success-light: 134 61% 97%;
     
-    --warning: 38 92% 50%;
+    --warning: 25 95% 53%;
     --warning-foreground: 0 0% 100%;
-    --warning-light: 38 92% 95%;
+    --warning-light: 25 95% 97%;
     
-    --info: 199 89% 48%;
+    --info: 213 94% 68%;
     --info-foreground: 0 0% 100%;
-    --info-light: 199 89% 95%;
+    --info-light: 213 94% 97%;
     
-    --neutral: 215 14% 34%;
+    --neutral: 215 16% 47%;
     --neutral-foreground: 0 0% 100%;
-    --neutral-light: 215 14% 95%;
+    --neutral-light: 215 16% 97%;
 
     /* Gradients */
     --gradient-primary: linear-gradient(135deg, hsl(239 84% 67%), hsl(262 83% 58%));
