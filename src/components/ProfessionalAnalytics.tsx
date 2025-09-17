@@ -91,10 +91,17 @@ export function ProfessionalAnalytics() {
         name: comp.brand_name,
         visibility_count: comp.visibility_count,
         keyword: comp.keyword,
-        rank_position: comp.rank_position,
-        sentiment: fold3.competitor_sentiment.find(cs => cs.brand_name === comp.brand_name)?.sentiment_summary || "Neutral"
+        rank_position: comp.rank_position || 0,
+        sentiment: fold3.competitor_sentiment.find(cs => cs.brand_name === comp.brand_name)?.sentiment_summary || "Neutral",
+        key_phrases: fold3.competitor_sentiment.find(cs => cs.brand_name === comp.brand_name)?.key_phrases || [],
+        sentiment_score: fold3.competitor_sentiment.find(cs => cs.brand_name === comp.brand_name)?.overall_sentiment_score || 0
       })),
-      sources: fold2.sources,
+      sources: fold2.sources.map(source => ({
+        ...source,
+        domain: source.domain || source.source.replace('https://', '').replace('http://', '').split('/')[0],
+        category: source.source_category || 'Other'
+      })),
+      categories: fold4.categories,
       attributes: fold4.attributes_matrix,
       recommendations: fold5.recommended_actions
     };
@@ -316,20 +323,44 @@ export function ProfessionalAnalytics() {
               <CardContent>
                 <div className="space-y-4">
                   {transformedData.competitors.map((competitor, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 rounded-lg border border-border/50">
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-foreground">{competitor.name}</h4>
-                        <p className="text-sm text-muted-foreground">{competitor.keyword}</p>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <div className="text-right">
-                          <div className="font-semibold text-foreground">{competitor.visibility_count.toLocaleString()}</div>
-                          <div className="text-xs text-muted-foreground">Visibility Count</div>
+                    <div key={index} className="p-4 rounded-lg border border-border/50 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3">
+                            <h4 className="font-semibold text-foreground">{competitor.name}</h4>
+                            {competitor.rank_position && (
+                              <Badge variant="outline" className="text-xs">#{competitor.rank_position}</Badge>
+                            )}
+                          </div>
+                          <p className="text-sm text-muted-foreground">{competitor.keyword}</p>
                         </div>
-                        <Badge className={getSentimentColor(competitor.sentiment)}>
-                          {competitor.sentiment}
-                        </Badge>
+                        <div className="flex items-center gap-4">
+                          <div className="text-right">
+                            <div className="font-semibold text-foreground">{competitor.visibility_count.toLocaleString()}</div>
+                            <div className="text-xs text-muted-foreground">Visibility Count</div>
+                          </div>
+                          <Badge className={getSentimentColor(competitor.sentiment)}>
+                            {competitor.sentiment}
+                          </Badge>
+                        </div>
                       </div>
+                      {competitor.key_phrases && competitor.key_phrases.length > 0 && (
+                        <div>
+                          <div className="text-xs text-muted-foreground mb-1">Key phrases:</div>
+                          <div className="flex flex-wrap gap-1">
+                            {competitor.key_phrases.slice(0, 3).map((phrase, phraseIndex) => (
+                              <Badge key={phraseIndex} variant="outline" className="text-xs">
+                                {phrase}
+                              </Badge>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {competitor.sentiment_score > 0 && (
+                        <div className="text-xs text-muted-foreground">
+                          Sentiment Score: {competitor.sentiment_score}/10
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -348,17 +379,52 @@ export function ProfessionalAnalytics() {
                   {transformedData.sources.map((source, index) => (
                     <div key={index} className="flex items-center justify-between p-4 rounded-lg border border-border/50">
                       <div className="flex-1">
-                        <h4 className="font-semibold text-foreground">{source.source}</h4>
-                        <p className="text-sm text-muted-foreground">Relevance Score: {source.relevance_score}</p>
+                        <h4 className="font-semibold text-foreground">{source.domain}</h4>
+                        <p className="text-sm text-muted-foreground">{source.source}</p>
+                        <div className="flex items-center gap-2 mt-1">
+                          <Badge variant="outline" className="text-xs">{source.category}</Badge>
+                          <span className="text-xs text-muted-foreground">Relevance: {source.relevance_score}</span>
+                        </div>
                       </div>
                       <div className="flex items-center gap-4">
                         <div className="text-right">
                           <div className="font-semibold text-foreground">{source.frequency}</div>
-                          <div className="text-xs text-muted-foreground">Frequency</div>
+                          <div className="text-xs text-muted-foreground">Citations</div>
                         </div>
                         <Badge className={getSentimentColor(source.sentiment)}>
                           {source.sentiment}
                         </Badge>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-border/50">
+              <CardHeader>
+                <CardTitle className="text-lg font-semibold">Content Categories</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {transformedData.categories.map((category, index) => (
+                    <div key={index} className="p-4 rounded-lg border border-border/50">
+                      <div className="flex items-center justify-between mb-2">
+                        <h4 className="font-semibold text-foreground">{category.category_name}</h4>
+                        <Badge className={category.visibility_level === "High" ? "bg-success/10 text-success" : "bg-muted"}>
+                          {category.visibility_level}
+                        </Badge>
+                      </div>
+                      <div className="text-sm text-muted-foreground mb-2">
+                        Total mentions: {category.total_mentions}
+                      </div>
+                      <div className="space-y-1">
+                        {category.top_brands.slice(0, 3).map((brand, brandIndex) => (
+                          <div key={brandIndex} className="flex justify-between text-xs">
+                            <span>{brand.brand}</span>
+                            <span className="text-muted-foreground">{brand.mentions}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   ))}
@@ -405,9 +471,19 @@ export function ProfessionalAnalytics() {
                         </Badge>
                       </div>
                       <p className="text-sm text-muted-foreground mb-2">{attr.value}</p>
-                      <div className="text-xs text-muted-foreground">
-                        Frequency: {attr.frequency.toLocaleString()} mentions
+                      <div className="flex justify-between text-xs text-muted-foreground">
+                        <span>Frequency: {attr.frequency.toLocaleString()} mentions</span>
+                        {attr.tesla_position && (
+                          <Badge variant="outline" className="text-xs">
+                            Tesla: {attr.tesla_position}
+                          </Badge>
+                        )}
                       </div>
+                      {attr.competitor_average && (
+                        <div className="text-xs text-muted-foreground mt-1">
+                          Competitor avg: {attr.competitor_average.toLocaleString()}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -421,28 +497,94 @@ export function ProfessionalAnalytics() {
               <CardHeader>
                 <CardTitle className="text-lg font-semibold">Recommended Actions</CardTitle>
               </CardHeader>
-              <CardContent>
+               <CardContent>
                 <div className="space-y-4">
                   {transformedData.recommendations.map((action, index) => (
                     <div key={index} className="p-4 rounded-lg border border-border/50">
-                      <div className="flex items-center justify-between mb-3">
-                        <h4 className="font-semibold text-foreground">{action.category}</h4>
-                        <div className="flex gap-2">
-                          <Badge className={getPriorityColor(action.priority)}>
-                            {action.priority} Priority
-                          </Badge>
-                          <Badge variant="outline">
-                            {action.effort} Effort
-                          </Badge>
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-1">
+                            <h4 className="font-semibold text-foreground">{action.category}</h4>
+                            <Badge className={getPriorityColor(action.priority)}>
+                              {action.priority} Priority
+                            </Badge>
+                          </div>
                         </div>
                       </div>
                       <p className="text-sm text-foreground mb-3">{action.action}</p>
-                      <p className="text-xs text-muted-foreground">
-                        <strong>Impact:</strong> {action.impact}
-                      </p>
+                      <div className="space-y-2">
+                        <div className="text-sm">
+                          <span className="font-medium text-muted-foreground">Impact: </span>
+                          <span className="text-foreground">{action.impact}</span>
+                        </div>
+                        <div className="flex items-center gap-4 text-sm">
+                          <div>
+                            <span className="font-medium text-muted-foreground">Effort: </span>
+                            <Badge variant="outline" className="text-xs">
+                              {action.effort}
+                            </Badge>
+                          </div>
+                          {action.expected_visibility_increase && (
+                            <div>
+                              <span className="font-medium text-muted-foreground">Expected Increase: </span>
+                              <Badge variant="outline" className="text-xs text-success">
+                                {action.expected_visibility_increase}
+                              </Badge>
+                            </div>
+                          )}
+                        </div>
+                        {action.target_sources && action.target_sources.length > 0 && (
+                          <div className="text-sm">
+                            <span className="font-medium text-muted-foreground">Target Sources: </span>
+                            <div className="flex flex-wrap gap-1 mt-1">
+                              {action.target_sources.map((source, sourceIndex) => (
+                                <Badge key={sourceIndex} variant="outline" className="text-xs">
+                                  {source}
+                                </Badge>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
                     </div>
                   ))}
                 </div>
+
+                {analyticsData["Fold 5 - Recommended Actions"].visibility_forecast && (
+                  <Card className="mt-6 border-border/50">
+                    <CardHeader>
+                      <CardTitle className="text-lg font-semibold">Visibility Forecast</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div className="text-center">
+                          <div className="text-2xl font-bold text-foreground">
+                            {analyticsData["Fold 5 - Recommended Actions"].visibility_forecast.current_score}
+                          </div>
+                          <div className="text-sm text-muted-foreground">Current Score</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-2xl font-bold text-success">
+                            {analyticsData["Fold 5 - Recommended Actions"].visibility_forecast.potential_score}
+                          </div>
+                          <div className="text-sm text-muted-foreground">Potential Score</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-lg font-semibold text-foreground">
+                            {analyticsData["Fold 5 - Recommended Actions"].visibility_forecast.timeline}
+                          </div>
+                          <div className="text-sm text-muted-foreground">Timeline</div>
+                        </div>
+                        <div className="text-center">
+                          <div className="text-lg font-semibold text-foreground">
+                            {analyticsData["Fold 5 - Recommended Actions"].visibility_forecast.confidence}
+                          </div>
+                          <div className="text-sm text-muted-foreground">Confidence</div>
+                        </div>
+                      </div>
+                    </CardContent>
+                  </Card>
+                )}
               </CardContent>
             </Card>
           </TabsContent>
