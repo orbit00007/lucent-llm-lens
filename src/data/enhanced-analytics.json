@@ -1,0 +1,193 @@
+{
+  "id": "example-analytics-123",
+  "type": "product",
+  "status": "completed",
+  "analytics": {
+    "Fold 1 - Overall Insights": {
+      "ai_visibility": "High",
+      "ai_sentiment": "Neutral",
+      "ai_sentiment_label": "Balanced perception with focus on innovation and privacy concerns",
+      "brand_mentions": {
+        "level": "High",
+        "count": 15234
+      },
+      "ai_sentiment_summary": {
+        "positive": { "count": 4520, "level": "Medium" },
+        "neutral": { "count": 8345, "level": "High" },
+        "negative": { "count": 2369, "level": "Medium" },
+        "most_prominent_sentiment": "Neutral",
+        "most_prominent_level": "High",
+        "ai_insight_label": "Google Search is widely recognized but faces mixed sentiment around privacy."
+      }
+    },
+    "Fold 2 - Source Performance Analysis": {
+      "sources": [
+        {
+          "source": "https://techcrunch.com",
+          "frequency": 345,
+          "relevance_score": 0.92,
+          "sentiment": "Neutral"
+        },
+        {
+          "source": "https://www.theverge.com",
+          "frequency": 287,
+          "relevance_score": 0.89,
+          "sentiment": "Positive"
+        },
+        {
+          "source": "https://www.reddit.com",
+          "frequency": 521,
+          "relevance_score": 0.75,
+          "sentiment": "Negative"
+        }
+      ]
+    },
+    "Fold 3 - Competitor Analysis": {
+      "competitors": [
+        {
+          "brand_name": "Bing",
+          "keyword": "search engine",
+          "visibility_count": 10300
+        },
+        {
+          "brand_name": "DuckDuckGo",
+          "keyword": "privacy-focused search",
+          "visibility_count": 5820
+        },
+        {
+          "brand_name": "Yahoo Search",
+          "keyword": "web search",
+          "visibility_count": 4720
+        },
+        {
+          "brand_name": "Ecosia",
+          "keyword": "environmentally friendly search",
+          "visibility_count": 1900
+        },
+        {
+          "brand_name": "Brave Search",
+          "keyword": "privacy-focused search",
+          "visibility_count": 1320
+        }
+      ],
+      "competitor_sentiment": [
+        {
+          "brand_name": "Bing",
+          "sentiment_summary": "Neutral",
+          "sentiment_attributes": ["Pricing", "Privacy", "Innovation", "Security", "Support", "Community Engagement", "SEO"]
+        },
+        {
+          "brand_name": "DuckDuckGo",
+          "sentiment_summary": "Highly Positive",
+          "sentiment_attributes": ["Privacy", "Innovation", "Security"]
+        },
+        {
+          "brand_name": "Yahoo Search",
+          "sentiment_summary": "Neutral",
+          "sentiment_attributes": ["Pricing", "SEO"]
+        },
+        {
+          "brand_name": "Ecosia",
+          "sentiment_summary": "Positive",
+          "sentiment_attributes": ["Innovation", "Community Engagement"]
+        },
+        {
+          "brand_name": "Brave Search",
+          "sentiment_summary": "Positive",
+          "sentiment_attributes": ["Privacy", "Innovation"]
+        }
+      ]
+    },
+    "Fold 4 - Content Impact": {
+      "categories": [
+        {
+          "category_name": "Analyst Platforms",
+          "visibility_level": "Medium",
+          "top_brands": ["Google Search", "Bing", "DuckDuckGo"]
+        },
+        {
+          "category_name": "Review Platforms",
+          "visibility_level": "High",
+          "top_brands": ["Google Search", "Brave Search", "Ecosia"]
+        },
+        {
+          "category_name": "Communities",
+          "visibility_level": "High",
+          "top_brands": ["Google Search", "DuckDuckGo", "Bing"]
+        },
+        {
+          "category_name": "Owned Content",
+          "visibility_level": "Medium",
+          "top_brands": ["Google Search", "Brave Search", "Ecosia"]
+        }
+      ],
+      "attributes_matrix": [
+        {
+          "attribute": "Privacy",
+          "value": "User data handling and anonymity",
+          "frequency": 4800,
+          "importance": "High"
+        },
+        {
+          "attribute": "AI Features",
+          "value": "Intelligent query interpretation and suggestions",
+          "frequency": 3700,
+          "importance": "High"
+        },
+        {
+          "attribute": "Advertising CPC",
+          "value": "Cost per click ad monetization",
+          "frequency": 2500,
+          "importance": "Medium"
+        },
+        {
+          "attribute": "User Experience",
+          "value": "Ease of use and interface design",
+          "frequency": 3100,
+          "importance": "Medium"
+        }
+      ]
+    },
+    "Fold 5 - Recommended Actions": {
+      "recommended_actions": [
+        {
+          "category": "Privacy",
+          "priority": "High",
+          "action": "Enhance transparency around data collection and provide more robust privacy controls.",
+          "impact": "Improves user trust and mitigates negative sentiment related to privacy concerns.",
+          "effort": "Medium"
+        },
+        {
+          "category": "AI Features",
+          "priority": "High",
+          "action": "Invest in advanced AI-driven search capabilities to stay ahead of competitors.",
+          "impact": "Strengthens brand positioning as an innovative leader in search technology.",
+          "effort": "High"
+        },
+        {
+          "category": "SEO & Content",
+          "priority": "Medium",
+          "action": "Optimize content for emerging search trends and keywords related to privacy and AI.",
+          "impact": "Boosts organic visibility and relevance in search results.",
+          "effort": "Medium"
+        },
+        {
+          "category": "Support",
+          "priority": "Low",
+          "action": "Expand customer support resources specifically addressing privacy and AI feature inquiries.",
+          "impact": "Improves user satisfaction and reduces confusion around AI functionalities.",
+          "effort": "Low"
+        },
+        {
+          "category": "Ads",
+          "priority": "Medium",
+          "action": "Refine ad targeting algorithms to better balance monetization and user privacy.",
+          "impact": "Enhances ad revenue while minimizing negative sentiment.",
+          "effort": "High"
+        }
+      ]
+    }
+  },
+  "created_at": "2025-09-12T17:14:03.835Z",
+  "updated_at": "2025-09-12T17:15:46.97Z"
+}
