@@ -26,25 +26,25 @@ import {
   Eye,
   MessageSquare
 } from "lucide-react";
-import analyticsData from "@/data/enhanced-analytics.json";
+import analyticsData from "@/data/newmockdata.json";
 
 export function ProfessionalAnalytics() {
   const [activeTab, setActiveTab] = useState("overview");
 
   // Transform the new data structure
   const transformedData = useMemo(() => {
-    const fold1 = analyticsData.analytics["Fold 1 - Overall Insights"];
-    const fold2 = analyticsData.analytics["Fold 2 - Source Performance Analysis"];
-    const fold3 = analyticsData.analytics["Fold 3 - Competitor Analysis"];
-    const fold4 = analyticsData.analytics["Fold 4 - Content Impact"];
-    const fold5 = analyticsData.analytics["Fold 5 - Recommended Actions"];
+    const fold1 = analyticsData["Fold 1 - Overall Insights"];
+    const fold2 = analyticsData["Fold 2 - Source Performance Analysis"];
+    const fold3 = analyticsData["Fold 3 - Competitor Analysis"];
+    const fold4 = analyticsData["Fold 4 - Content Impact"];
+    const fold5 = analyticsData["Fold 5 - Recommended Actions"];
 
     return {
       insight_cards: [
         {
           title: "AI Visibility",
           value: fold1.ai_visibility,
-          trend: "stable",
+          trend: fold1.ai_visibility === "High" ? "up" : "stable",
           description: fold1.ai_sentiment_label,
           icon: "visibility"
         },
@@ -52,38 +52,38 @@ export function ProfessionalAnalytics() {
           title: "Brand Mentions",
           value: fold1.brand_mentions.count.toLocaleString(),
           trend: fold1.brand_mentions.level === "High" ? "up" : "stable",
-          description: `${fold1.brand_mentions.level} volume of brand mentions detected`,
+          description: `${fold1.brand_mentions.level} volume for ${analyticsData.brand_name}`,
           icon: "mentions"
         },
         {
           title: "AI Sentiment",
           value: fold1.ai_sentiment,
-          trend: "stable",
+          trend: fold1.ai_sentiment === "Positive" ? "up" : fold1.ai_sentiment === "Negative" ? "down" : "stable",
           description: fold1.ai_sentiment_summary.ai_insight_label,
           icon: "sentiment"
         },
         {
-          title: "Competitor Coverage",
-          value: `${fold3.competitors.length} Brands`,
-          trend: "stable",
-          description: "Active competitors in the search engine space",
+          title: "Market Position",
+          value: `#${fold3.competitors.find(c => c.brand_name === analyticsData.brand_name)?.rank_position || 1}`,
+          trend: "up",
+          description: `Leading position in ${analyticsData.analysis_keywords[0]} market`,
           icon: "competition"
         }
       ],
       sentiment_data: [
         { 
           name: 'Positive', 
-          value: Math.round((fold1.ai_sentiment_summary.positive.count / (fold1.ai_sentiment_summary.positive.count + fold1.ai_sentiment_summary.neutral.count + fold1.ai_sentiment_summary.negative.count)) * 100), 
+          value: fold1.ai_sentiment_summary.positive.percentage || Math.round((fold1.ai_sentiment_summary.positive.count / (fold1.ai_sentiment_summary.positive.count + fold1.ai_sentiment_summary.neutral.count + fold1.ai_sentiment_summary.negative.count)) * 100), 
           color: '#22c55e' 
         },
         { 
           name: 'Neutral', 
-          value: Math.round((fold1.ai_sentiment_summary.neutral.count / (fold1.ai_sentiment_summary.positive.count + fold1.ai_sentiment_summary.neutral.count + fold1.ai_sentiment_summary.negative.count)) * 100), 
+          value: fold1.ai_sentiment_summary.neutral.percentage || Math.round((fold1.ai_sentiment_summary.neutral.count / (fold1.ai_sentiment_summary.positive.count + fold1.ai_sentiment_summary.neutral.count + fold1.ai_sentiment_summary.negative.count)) * 100), 
           color: '#64748b' 
         },
         { 
           name: 'Negative', 
-          value: Math.round((fold1.ai_sentiment_summary.negative.count / (fold1.ai_sentiment_summary.positive.count + fold1.ai_sentiment_summary.neutral.count + fold1.ai_sentiment_summary.negative.count)) * 100), 
+          value: fold1.ai_sentiment_summary.negative.percentage || Math.round((fold1.ai_sentiment_summary.negative.count / (fold1.ai_sentiment_summary.positive.count + fold1.ai_sentiment_summary.neutral.count + fold1.ai_sentiment_summary.negative.count)) * 100), 
           color: '#ef4444' 
         }
       ],
@@ -91,6 +91,7 @@ export function ProfessionalAnalytics() {
         name: comp.brand_name,
         visibility_count: comp.visibility_count,
         keyword: comp.keyword,
+        rank_position: comp.rank_position,
         sentiment: fold3.competitor_sentiment.find(cs => cs.brand_name === comp.brand_name)?.sentiment_summary || "Neutral"
       })),
       sources: fold2.sources,
@@ -164,8 +165,8 @@ export function ProfessionalAnalytics() {
         <div className="max-w-7xl mx-auto px-6 py-6">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-foreground">Brand Intelligence Analytics</h1>
-              <p className="text-muted-foreground mt-1">Professional analysis report • {analyticsData.id}</p>
+              <h1 className="text-2xl font-bold text-foreground">{analyticsData.brand_name} - Brand Intelligence Analytics</h1>
+              <p className="text-muted-foreground mt-1">Professional analysis report • {analyticsData.id} • Keywords: {analyticsData.analysis_keywords.join(", ")}</p>
             </div>
             <Badge variant="secondary" className="bg-success/10 text-success border-success/20">
               {analyticsData.status.charAt(0).toUpperCase() + analyticsData.status.slice(1)}
