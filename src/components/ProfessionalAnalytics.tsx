@@ -1,120 +1,92 @@
-import { useState, useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
+import React, { useMemo } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  BarChart, 
-  Bar, 
-  XAxis, 
-  YAxis, 
-  CartesianGrid, 
-  Tooltip, 
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
+  PieChart, Pie, Cell, Legend
 } from 'recharts';
 import { 
-  TrendingUp, 
-  TrendingDown, 
-  Minus, 
-  Activity,
-  Users,
-  Shield,
-  Bot,
-  Eye,
-  MessageSquare
-} from "lucide-react";
-import analyticsData from "@/data/newmockdata.json";
+  TrendingUp, TrendingDown, Eye, Heart, MessageSquare, Users, 
+  Award, Target, Zap, Shield, Star, AlertTriangle, CheckCircle,
+  ExternalLink, Globe, BarChart3, ArrowUp, ArrowDown, Minus, 
+  Activity, Crown, Car, Cpu, Brain
+} from 'lucide-react';
+import analyticsData from '../data/newmockdata.json';
 
-export function ProfessionalAnalytics() {
-  const [activeTab, setActiveTab] = useState("overview");
-
-  // Transform the new data structure
+const ProfessionalAnalytics: React.FC = () => {
   const transformedData = useMemo(() => {
-    const fold1 = analyticsData["Fold 1 - Overall Insights"];
-    const fold2 = analyticsData["Fold 2 - Source Performance Analysis"];
-    const fold3 = analyticsData["Fold 3 - Competitor Analysis"];
-    const fold4 = analyticsData["Fold 4 - Content Impact"];
-    const fold5 = analyticsData["Fold 5 - Recommended Actions"];
+    const data = analyticsData as any;
+    
+    // Transform overall insights
+    const overallInsights = data.overall_insights;
+    const insightCards = [
+      {
+        title: "AI Visibility",
+        value: overallInsights?.ai_visibility || "High",
+        trend: "up",
+        description: overallInsights?.ai_sentiment_label || ""
+      },
+      {
+        title: "Brand Mentions", 
+        value: overallInsights?.brand_mentions?.count?.toLocaleString() || "0",
+        trend: "up",
+        description: `${overallInsights?.brand_mentions?.level || "High"} engagement level`
+      },
+      {
+        title: "Sentiment Score",
+        value: overallInsights?.ai_sentiment_summary?.positive?.count ? 
+          `${Math.round((overallInsights.ai_sentiment_summary.positive.count / 
+            (overallInsights.ai_sentiment_summary.positive.count + 
+             overallInsights.ai_sentiment_summary.neutral.count + 
+             overallInsights.ai_sentiment_summary.negative.count)) * 100)}%` : "0%",
+        trend: "up", 
+        description: overallInsights?.ai_sentiment_summary?.most_prominent_sentiment || "Positive"
+      }
+    ];
+
+    const sentimentData = overallInsights?.ai_sentiment_summary ? [
+      { name: 'Positive', value: overallInsights.ai_sentiment_summary.positive.count, color: '#10b981' },
+      { name: 'Neutral', value: overallInsights.ai_sentiment_summary.neutral.count, color: '#6b7280' },
+      { name: 'Negative', value: overallInsights.ai_sentiment_summary.negative.count, color: '#ef4444' }
+    ] : [];
+
+    // Transform source performance analysis
+    const sourceAnalysis = data.source_performance_analysis;
+    const sources = sourceAnalysis?.sources || [];
+
+    // Transform competitor analysis
+    const competitorAnalysis = data.competitor_analysis;
+    const competitorPositions = competitorAnalysis?.competitor_positions || [];
+
+    // Transform content impact
+    const contentImpact = data.content_impact;
+    const contentCategories = contentImpact?.categories || [];
+    const attributes = contentImpact?.attributes_matrix || [];
+
+    // Transform recommended actions
+    const recommendedActions = data.recommended_actions?.recommended_actions || [];
 
     return {
-      insight_cards: [
-        {
-          title: "AI Visibility",
-          value: fold1.ai_visibility,
-          trend: fold1.ai_visibility === "High" ? "up" : "stable",
-          description: fold1.ai_sentiment_label,
-          icon: "visibility"
-        },
-        {
-          title: "Brand Mentions",
-          value: fold1.brand_mentions.count.toLocaleString(),
-          trend: fold1.brand_mentions.level === "High" ? "up" : "stable",
-          description: `${fold1.brand_mentions.level} volume for ${analyticsData.brand_name}`,
-          icon: "mentions"
-        },
-        {
-          title: "AI Sentiment",
-          value: fold1.ai_sentiment,
-          trend: fold1.ai_sentiment === "Positive" ? "up" : fold1.ai_sentiment === "Negative" ? "down" : "stable",
-          description: fold1.ai_sentiment_summary.ai_insight_label,
-          icon: "sentiment"
-        },
-        {
-          title: "Market Position",
-          value: `#${fold3.competitors.find(c => c.brand_name === analyticsData.brand_name)?.rank_position || 1}`,
-          trend: "up",
-          description: `Leading position in ${analyticsData.analysis_keywords[0]} market`,
-          icon: "competition"
-        }
-      ],
-      sentiment_data: [
-        { 
-          name: 'Positive', 
-          value: fold1.ai_sentiment_summary.positive.percentage || Math.round((fold1.ai_sentiment_summary.positive.count / (fold1.ai_sentiment_summary.positive.count + fold1.ai_sentiment_summary.neutral.count + fold1.ai_sentiment_summary.negative.count)) * 100), 
-          color: '#22c55e' 
-        },
-        { 
-          name: 'Neutral', 
-          value: fold1.ai_sentiment_summary.neutral.percentage || Math.round((fold1.ai_sentiment_summary.neutral.count / (fold1.ai_sentiment_summary.positive.count + fold1.ai_sentiment_summary.neutral.count + fold1.ai_sentiment_summary.negative.count)) * 100), 
-          color: '#64748b' 
-        },
-        { 
-          name: 'Negative', 
-          value: fold1.ai_sentiment_summary.negative.percentage || Math.round((fold1.ai_sentiment_summary.negative.count / (fold1.ai_sentiment_summary.positive.count + fold1.ai_sentiment_summary.neutral.count + fold1.ai_sentiment_summary.negative.count)) * 100), 
-          color: '#ef4444' 
-        }
-      ],
-      competitors: fold3.competitors.map(comp => ({
-        name: comp.brand_name,
-        visibility_count: comp.visibility_count,
-        keyword: comp.keyword,
-        rank_position: comp.rank_position || 0,
-        sentiment: fold3.competitor_sentiment.find(cs => cs.brand_name === comp.brand_name)?.sentiment_summary || "Neutral",
-        key_phrases: fold3.competitor_sentiment.find(cs => cs.brand_name === comp.brand_name)?.key_phrases || [],
-        sentiment_score: fold3.competitor_sentiment.find(cs => cs.brand_name === comp.brand_name)?.overall_sentiment_score || 0
-      })),
-      sources: fold2.sources.map(source => ({
-        ...source,
-        domain: source.domain || source.source.replace('https://', '').replace('http://', '').split('/')[0],
-        category: source.source_category || 'Other'
-      })),
-      categories: fold4.categories,
-      attributes: fold4.attributes_matrix,
-      recommendations: fold5.recommended_actions
+      insightCards,
+      sentimentData,
+      sources,
+      competitorPositions,
+      contentCategories,
+      attributes, 
+      recommendedActions
     };
   }, []);
 
+  // Utility functions
   const getIcon = (iconType: string) => {
     const iconMap: Record<string, React.ReactNode> = {
       "visibility": <Eye className="w-5 h-5" />,
       "mentions": <MessageSquare className="w-5 h-5" />,
-      "sentiment": <Activity className="w-5 h-5" />,
+      "sentiment": <Heart className="w-5 h-5" />,
       "competition": <Users className="w-5 h-5" />,
       "privacy": <Shield className="w-5 h-5" />,
-      "ai": <Bot className="w-5 h-5" />
+      "ai": <Brain className="w-5 h-5" />
     };
     return iconMap[iconType] || <Activity className="w-5 h-5" />;
   };
@@ -122,43 +94,47 @@ export function ProfessionalAnalytics() {
   const getTrendIcon = (trend: string) => {
     switch (trend) {
       case 'up':
-        return <TrendingUp className="w-4 h-4 text-success" />;
+        return <TrendingUp className="w-4 h-4 text-green-600" />;
       case 'down':
-        return <TrendingDown className="w-4 h-4 text-destructive" />;
+        return <TrendingDown className="w-4 h-4 text-red-600" />;
       default:
-        return <Minus className="w-4 h-4 text-muted-foreground" />;
+        return <Minus className="w-4 h-4 text-gray-400" />;
     }
   };
 
   const getPriorityColor = (priority: string) => {
     switch (priority.toLowerCase()) {
       case 'high':
-        return 'bg-destructive/10 text-destructive border-destructive/20';
+        return 'text-red-700 bg-red-50 border-red-200';
       case 'medium':
-        return 'bg-warning/10 text-warning border-warning/20';
+        return 'text-yellow-700 bg-yellow-50 border-yellow-200';
       case 'low':
-        return 'bg-success/10 text-success border-success/20';
+        return 'text-green-700 bg-green-50 border-green-200';
       default:
-        return 'bg-muted text-muted-foreground border-border';
+        return 'text-gray-700 bg-gray-50 border-gray-200';
     }
   };
 
   const getSentimentColor = (sentiment: string) => {
     switch (sentiment.toLowerCase()) {
       case 'positive':
-      case 'highly positive':
-        return 'bg-success/10 text-success border-success/20';
+        return 'text-green-700 bg-green-50 border-green-200';
       case 'negative':
-        return 'bg-destructive/10 text-destructive border-destructive/20';
+        return 'text-red-700 bg-red-50 border-red-200';
       default:
-        return 'bg-muted text-muted-foreground border-border';
+        return 'text-gray-700 bg-gray-50 border-gray-200';
     }
   };
 
-  const competitorChartData = transformedData.competitors.map(comp => ({
-    name: comp.name,
-    visibility: comp.visibility_count
-  }));
+  // Prepare chart data for competitor analysis
+  const competitorChartData = transformedData.competitorPositions.flatMap(pos => 
+    pos.top_competitors.map(comp => ({
+      name: comp.brand_name,
+      keyword: pos.keyword,
+      visibility: comp.visibility_count,
+      rank: comp.rank
+    }))
+  );
 
   const attributesChartData = transformedData.attributes.map(attr => ({
     name: attr.attribute,
@@ -166,24 +142,44 @@ export function ProfessionalAnalytics() {
   }));
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b border-border bg-card/50">
-        <div className="max-w-7xl mx-auto px-6 py-6">
+    <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        <div className="mb-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-2xl font-bold text-foreground">{analyticsData.brand_name} - Brand Intelligence Analytics</h1>
-              <p className="text-muted-foreground mt-1">Professional analysis report • {analyticsData.id} • Keywords: {analyticsData.analysis_keywords.join(", ")}</p>
+              <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
+                {analyticsData.brand_name} Brand Intelligence Analytics
+              </h1>
+              <p className="text-muted-foreground mt-2">
+                Analysis Keywords: {analyticsData.analysis_keywords?.join(', ')}
+              </p>
+              <p className="text-sm text-muted-foreground">
+                Website: <a href={analyticsData.brand_website} target="_blank" rel="noopener noreferrer" 
+                           className="text-primary hover:underline">{analyticsData.brand_website}</a>
+              </p>
             </div>
-            <Badge variant="secondary" className="bg-success/10 text-success border-success/20">
-              {analyticsData.status.charAt(0).toUpperCase() + analyticsData.status.slice(1)}
-            </Badge>
+            <div className="text-right">
+              <Badge variant="secondary" className="mb-2">
+                {analyticsData.status === 'completed' ? (
+                  <>
+                    <CheckCircle className="w-3 h-3 mr-1" />
+                    Completed
+                  </>
+                ) : (
+                  <>
+                    <Activity className="w-3 h-3 mr-1" />
+                    {analyticsData.status}
+                  </>
+                )}
+              </Badge>
+              <p className="text-xs text-muted-foreground">
+                Updated: {new Date(analyticsData.updated_at).toLocaleDateString()}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <Tabs defaultValue="overview" className="space-y-6">
           <TabsList className="grid w-full grid-cols-6 bg-muted/30">
             <TabsTrigger value="overview">Overview</TabsTrigger>
             <TabsTrigger value="sentiment">Sentiment</TabsTrigger>
@@ -193,15 +189,14 @@ export function ProfessionalAnalytics() {
             <TabsTrigger value="actions">Actions</TabsTrigger>
           </TabsList>
 
-          {/* Overview Tab */}
           <TabsContent value="overview" className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {transformedData.insight_cards.map((card, index) => (
-                <Card key={index} className="border-border/50">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {transformedData.insightCards.map((card, index) => (
+                <Card key={index} className="shadow-card border-card-border">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between mb-4">
                       <div className="p-2 rounded-lg bg-primary/10 text-primary">
-                        {getIcon(card.icon)}
+                        {getIcon(card.title.toLowerCase().replace(' ', '_'))}
                       </div>
                       {getTrendIcon(card.trend)}
                     </div>
@@ -216,380 +211,346 @@ export function ProfessionalAnalytics() {
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <Card className="border-border/50">
+              <Card className="shadow-card border-card-border">
                 <CardHeader>
-                  <CardTitle className="text-lg font-semibold">Sentiment Distribution</CardTitle>
+                  <CardTitle className="flex items-center gap-2">
+                    <Heart className="w-5 h-5 text-primary" />
+                    Sentiment Distribution
+                  </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="h-64">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={transformedData.sentiment_data}
-                          cx="50%"
-                          cy="50%"
-                          outerRadius={80}
-                          dataKey="value"
-                          label={({name, value}) => `${name}: ${value}%`}
-                        >
-                          {transformedData.sentiment_data.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                        <Tooltip />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </div>
-                </CardContent>
-              </Card>
-
-              <Card className="border-border/50">
-                <CardHeader>
-                  <CardTitle className="text-lg font-semibold">Top Competitors by Visibility</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="h-64">
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={competitorChartData.slice(0, 5)}>
-                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                        <XAxis 
-                          dataKey="name" 
-                          stroke="hsl(var(--muted-foreground))"
-                          tick={{ fontSize: 12 }}
-                        />
-                        <YAxis stroke="hsl(var(--muted-foreground))" />
-                        <Tooltip 
-                          contentStyle={{ 
-                            backgroundColor: 'hsl(var(--card))',
-                            border: '1px solid hsl(var(--border))',
-                            borderRadius: '8px'
-                          }}
-                        />
-                        <Bar dataKey="visibility" fill="hsl(var(--primary))" />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-
-          {/* Sentiment Tab */}
-          <TabsContent value="sentiment" className="space-y-6">
-            <Card className="border-border/50">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold">Detailed Sentiment Analysis</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
-                  {transformedData.sentiment_data.map((item, index) => (
-                    <div key={index} className="text-center p-4 rounded-lg border border-border/50">
-                      <div className="text-2xl font-bold" style={{ color: item.color }}>
-                        {item.value}%
-                      </div>
-                      <div className="text-sm text-muted-foreground">{item.name}</div>
-                    </div>
-                  ))}
-                </div>
-                <div className="h-64">
-                  <ResponsiveContainer width="100%" height="100%">
+                  <ResponsiveContainer width="100%" height={300}>
                     <PieChart>
                       <Pie
-                        data={transformedData.sentiment_data}
+                        data={transformedData.sentimentData}
                         cx="50%"
                         cy="50%"
-                        outerRadius={100}
+                        outerRadius={80}
                         dataKey="value"
-                        label={({name, value}) => `${name}: ${value}%`}
+                        label={({name, value}) => `${name}: ${value}`}
                       >
-                        {transformedData.sentiment_data.map((entry, index) => (
+                        {transformedData.sentimentData.map((entry, index) => (
                           <Cell key={`cell-${index}`} fill={entry.color} />
                         ))}
                       </Pie>
                       <Tooltip />
+                      <Legend />
                     </PieChart>
                   </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
+                </CardContent>
+              </Card>
 
-          {/* Competitors Tab */}
-          <TabsContent value="competitors" className="space-y-6">
-            <Card className="border-border/50">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold">Competitor Analysis</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {transformedData.competitors.map((competitor, index) => (
-                    <div key={index} className="p-4 rounded-lg border border-border/50 space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3">
-                            <h4 className="font-semibold text-foreground">{competitor.name}</h4>
-                            {competitor.rank_position && (
-                              <Badge variant="outline" className="text-xs">#{competitor.rank_position}</Badge>
-                            )}
-                          </div>
-                          <p className="text-sm text-muted-foreground">{competitor.keyword}</p>
-                        </div>
-                        <div className="flex items-center gap-4">
-                          <div className="text-right">
-                            <div className="font-semibold text-foreground">{competitor.visibility_count.toLocaleString()}</div>
-                            <div className="text-xs text-muted-foreground">Visibility Count</div>
-                          </div>
-                          <Badge className={getSentimentColor(competitor.sentiment)}>
-                            {competitor.sentiment}
-                          </Badge>
-                        </div>
-                      </div>
-                      {competitor.key_phrases && competitor.key_phrases.length > 0 && (
-                        <div>
-                          <div className="text-xs text-muted-foreground mb-1">Key phrases:</div>
-                          <div className="flex flex-wrap gap-1">
-                            {competitor.key_phrases.slice(0, 3).map((phrase, phraseIndex) => (
-                              <Badge key={phraseIndex} variant="outline" className="text-xs">
-                                {phrase}
-                              </Badge>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                      {competitor.sentiment_score > 0 && (
-                        <div className="text-xs text-muted-foreground">
-                          Sentiment Score: {competitor.sentiment_score}/10
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Sources Tab */}
-          <TabsContent value="sources" className="space-y-6">
-            <Card className="border-border/50">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold">Source Performance Analysis</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {transformedData.sources.map((source, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 rounded-lg border border-border/50">
-                      <div className="flex-1">
-                        <h4 className="font-semibold text-foreground">{source.domain}</h4>
-                        <p className="text-sm text-muted-foreground">{source.source}</p>
-                        <div className="flex items-center gap-2 mt-1">
-                          <Badge variant="outline" className="text-xs">{source.category}</Badge>
-                          <span className="text-xs text-muted-foreground">Relevance: {source.relevance_score}</span>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-4">
-                        <div className="text-right">
-                          <div className="font-semibold text-foreground">{source.frequency}</div>
-                          <div className="text-xs text-muted-foreground">Citations</div>
-                        </div>
-                        <Badge className={getSentimentColor(source.sentiment)}>
-                          {source.sentiment}
-                        </Badge>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-
-            <Card className="border-border/50">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold">Content Categories</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {transformedData.categories.map((category, index) => (
-                    <div key={index} className="p-4 rounded-lg border border-border/50">
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="font-semibold text-foreground">{category.category_name}</h4>
-                        <Badge className={category.visibility_level === "High" ? "bg-success/10 text-success" : "bg-muted"}>
-                          {category.visibility_level}
-                        </Badge>
-                      </div>
-                      <div className="text-sm text-muted-foreground mb-2">
-                        Total mentions: {category.total_mentions}
-                      </div>
-                      <div className="space-y-1">
-                        {category.top_brands.slice(0, 3).map((brand, brandIndex) => (
-                          <div key={brandIndex} className="flex justify-between text-xs">
-                            <span>{brand.brand}</span>
-                            <span className="text-muted-foreground">{brand.mentions}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* Attributes Tab */}
-          <TabsContent value="attributes" className="space-y-6">
-            <Card className="border-border/50">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold">Attribute Analysis</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="h-64 mb-6">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={attributesChartData}>
-                      <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
-                      <XAxis 
-                        dataKey="name" 
-                        stroke="hsl(var(--muted-foreground))"
-                        tick={{ fontSize: 12 }}
-                      />
-                      <YAxis stroke="hsl(var(--muted-foreground))" />
+              <Card className="shadow-card border-card-border">
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <BarChart3 className="w-5 h-5 text-primary" />
+                    Competitor Visibility
+                  </CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <ResponsiveContainer width="100%" height={300}>
+                    <BarChart data={competitorChartData.slice(0, 6)}>
+                      <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
+                      <XAxis dataKey="name" className="text-xs" />
+                      <YAxis className="text-xs" />
                       <Tooltip 
-                        contentStyle={{ 
+                        contentStyle={{
                           backgroundColor: 'hsl(var(--card))',
                           border: '1px solid hsl(var(--border))',
                           borderRadius: '8px'
                         }}
                       />
-                      <Bar dataKey="frequency" fill="hsl(var(--primary))" />
+                      <Bar dataKey="visibility" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
                     </BarChart>
                   </ResponsiveContainer>
-                </div>
-                <div className="space-y-4">
-                  {transformedData.attributes.map((attr, index) => (
-                    <div key={index} className="p-4 rounded-lg border border-border/50">
-                      <div className="flex items-center justify-between mb-2">
-                        <h4 className="font-semibold text-foreground">{attr.attribute}</h4>
-                        <Badge className={getPriorityColor(attr.importance)}>
-                          {attr.importance}
-                        </Badge>
+                </CardContent>
+              </Card>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="sentiment" className="space-y-6">
+            <Card className="shadow-card border-card-border">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Heart className="w-5 h-5 text-primary" />
+                  Detailed Sentiment Analysis
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+                  {transformedData.sentimentData.map((item, index) => (
+                    <div key={index} className="text-center p-6 rounded-lg bg-muted/30">
+                      <div className="text-3xl font-bold mb-2" style={{ color: item.color }}>
+                        {item.value.toLocaleString()}
                       </div>
-                      <p className="text-sm text-muted-foreground mb-2">{attr.value}</p>
-                      <div className="flex justify-between text-xs text-muted-foreground">
-                        <span>Frequency: {attr.frequency.toLocaleString()} mentions</span>
-                        {attr.tesla_position && (
-                          <Badge variant="outline" className="text-xs">
-                            Tesla: {attr.tesla_position}
-                          </Badge>
-                        )}
-                      </div>
-                      {attr.competitor_average && (
-                        <div className="text-xs text-muted-foreground mt-1">
-                          Competitor avg: {attr.competitor_average.toLocaleString()}
-                        </div>
-                      )}
+                      <div className="text-sm text-muted-foreground font-medium">{item.name}</div>
                     </div>
                   ))}
                 </div>
+                <ResponsiveContainer width="100%" height={400}>
+                  <PieChart>
+                    <Pie
+                      data={transformedData.sentimentData}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={120}
+                      dataKey="value"
+                      label={({name, value, percent}) => `${name}: ${(percent * 100).toFixed(1)}%`}
+                    >
+                      {transformedData.sentimentData.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip />
+                    <Legend />
+                  </PieChart>
+                </ResponsiveContainer>
               </CardContent>
             </Card>
           </TabsContent>
 
-          {/* Actions Tab */}
-          <TabsContent value="actions" className="space-y-6">
-            <Card className="border-border/50">
-              <CardHeader>
-                <CardTitle className="text-lg font-semibold">Recommended Actions</CardTitle>
-              </CardHeader>
-               <CardContent>
-                <div className="space-y-4">
-                  {transformedData.recommendations.map((action, index) => (
-                    <div key={index} className="p-4 rounded-lg border border-border/50">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-1">
-                            <h4 className="font-semibold text-foreground">{action.category}</h4>
-                            <Badge className={getPriorityColor(action.priority)}>
-                              {action.priority} Priority
-                            </Badge>
-                          </div>
-                        </div>
-                      </div>
-                      <p className="text-sm text-foreground mb-3">{action.action}</p>
-                      <div className="space-y-2">
-                        <div className="text-sm">
-                          <span className="font-medium text-muted-foreground">Impact: </span>
-                          <span className="text-foreground">{action.impact}</span>
-                        </div>
-                        <div className="flex items-center gap-4 text-sm">
-                          <div>
-                            <span className="font-medium text-muted-foreground">Effort: </span>
-                            <Badge variant="outline" className="text-xs">
-                              {action.effort}
-                            </Badge>
-                          </div>
-                          {action.expected_visibility_increase && (
-                            <div>
-                              <span className="font-medium text-muted-foreground">Expected Increase: </span>
-                              <Badge variant="outline" className="text-xs text-success">
-                                {action.expected_visibility_increase}
+          <TabsContent value="competitors" className="space-y-6">
+            <div className="space-y-6">
+              {transformedData.competitorPositions.map((position, index) => (
+                <Card key={position.keyword} className="shadow-card border-card-border">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      {position.keyword === 'self driving' && <Brain className="w-5 h-5 text-primary" />}
+                      {position.keyword === 'comfort' && <Heart className="w-5 h-5 text-accent" />}
+                      {position.keyword === 'technology' && <Cpu className="w-5 h-5 text-secondary" />}
+                      Keyword: "{position.keyword}"
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {position.top_competitors.map((competitor, compIndex) => (
+                        <div key={competitor.brand_name} 
+                             className={`p-4 rounded-lg border ${
+                               competitor.rank === 1 ? 'bg-primary/5 border-primary' :
+                               competitor.rank === 2 ? 'bg-accent/5 border-accent' :
+                               'bg-muted/30 border-border'
+                             }`}>
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              {competitor.rank === 1 && <Crown className="w-4 h-4 text-primary" />}
+                              <Badge variant="outline" className="text-xs">
+                                #{competitor.rank}
                               </Badge>
+                              <span className="font-medium text-sm">{competitor.brand_name}</span>
                             </div>
-                          )}
-                        </div>
-                        {action.target_sources && action.target_sources.length > 0 && (
-                          <div className="text-sm">
-                            <span className="font-medium text-muted-foreground">Target Sources: </span>
-                            <div className="flex flex-wrap gap-1 mt-1">
-                              {action.target_sources.map((source, sourceIndex) => (
-                                <Badge key={sourceIndex} variant="outline" className="text-xs">
-                                  {source}
-                                </Badge>
-                              ))}
-                            </div>
+                            <Badge className={getSentimentColor(competitor.sentiment)}>
+                              {competitor.sentiment}
+                            </Badge>
                           </div>
-                        )}
-                      </div>
+                          <p className="text-sm text-muted-foreground">
+                            Visibility: {competitor.visibility_count.toLocaleString()}
+                          </p>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
 
-                {analyticsData["Fold 5 - Recommended Actions"].visibility_forecast && (
-                  <Card className="mt-6 border-border/50">
-                    <CardHeader>
-                      <CardTitle className="text-lg font-semibold">Visibility Forecast</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                        <div className="text-center">
-                          <div className="text-2xl font-bold text-foreground">
-                            {analyticsData["Fold 5 - Recommended Actions"].visibility_forecast.current_score}
-                          </div>
-                          <div className="text-sm text-muted-foreground">Current Score</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-2xl font-bold text-success">
-                            {analyticsData["Fold 5 - Recommended Actions"].visibility_forecast.potential_score}
-                          </div>
-                          <div className="text-sm text-muted-foreground">Potential Score</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-lg font-semibold text-foreground">
-                            {analyticsData["Fold 5 - Recommended Actions"].visibility_forecast.timeline}
-                          </div>
-                          <div className="text-sm text-muted-foreground">Timeline</div>
-                        </div>
-                        <div className="text-center">
-                          <div className="text-lg font-semibold text-foreground">
-                            {analyticsData["Fold 5 - Recommended Actions"].visibility_forecast.confidence}
-                          </div>
-                          <div className="text-sm text-muted-foreground">Confidence</div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
+          <TabsContent value="sources" className="space-y-6">
+            <Card className="shadow-card border-card-border">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Globe className="w-5 h-5 text-primary" />
+                  Source Performance Analysis
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="overflow-x-auto">
+                  <table className="w-full">
+                    <thead>
+                      <tr className="border-b border-border">
+                        <th className="text-left py-3 px-4 font-medium">Source</th>
+                        <th className="text-left py-3 px-4 font-medium">Frequency</th>
+                        <th className="text-left py-3 px-4 font-medium">Relevance Score</th>
+                        <th className="text-left py-3 px-4 font-medium">Sentiment</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {transformedData.sources.map((source, index) => (
+                        <tr key={index} className="border-b border-border/50">
+                          <td className="py-3 px-4">
+                            <div className="flex items-center gap-2">
+                              <ExternalLink className="w-4 h-4 text-muted-foreground" />
+                              <a href={source.source} target="_blank" rel="noopener noreferrer" 
+                                 className="text-primary hover:underline text-sm">
+                                {new URL(source.source).hostname}
+                              </a>
+                            </div>
+                          </td>
+                          <td className="py-3 px-4">
+                            <Badge variant="secondary">{source.frequency}</Badge>
+                          </td>
+                          <td className="py-3 px-4">
+                            <div className="flex items-center gap-2">
+                              <div className="w-16 bg-muted rounded-full h-2">
+                                <div 
+                                  className="bg-primary h-2 rounded-full" 
+                                  style={{ width: `${source.relevance_score * 100}%` }}
+                                />
+                              </div>
+                              <span className="text-xs text-muted-foreground">
+                                {(source.relevance_score * 100).toFixed(0)}%
+                              </span>
+                            </div>
+                          </td>
+                          <td className="py-3 px-4">
+                            <Badge className={getSentimentColor(source.sentiment)}>
+                              {source.sentiment}
+                            </Badge>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </CardContent>
             </Card>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <h3 className="col-span-full text-xl font-semibold mb-4">Content Categories Performance</h3>
+              {transformedData.contentCategories.map((category, index) => (
+                <Card key={index} className="shadow-card border-card-border">
+                  <CardHeader>
+                    <CardTitle className="text-lg">{category.category_name}</CardTitle>
+                    <Badge className={`w-fit ${
+                      category.visibility_level === 'High' ? 'bg-green-500/10 text-green-700 border-green-200' :
+                      category.visibility_level === 'Medium' ? 'bg-yellow-500/10 text-yellow-700 border-yellow-200' :
+                      'bg-red-500/10 text-red-700 border-red-200'
+                    }`}>
+                      {category.visibility_level} Visibility
+                    </Badge>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2">
+                      <p className="text-sm font-medium text-muted-foreground">
+                        Brand Position: #{category.brand_position}
+                      </p>
+                      <div className="space-y-1">
+                        <p className="text-sm font-medium">Top Brands:</p>
+                        {category.top_brands?.slice(0, 3).map((brand, brandIndex) => (
+                          <div key={brandIndex} className="flex justify-between items-center text-sm">
+                            <span className={brand === 'Tesla' ? 'font-medium text-primary' : ''}>
+                              {brand}
+                            </span>
+                            <Badge variant="secondary" className="text-xs">
+                              #{brandIndex + 1}
+                            </Badge>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="attributes" className="space-y-6">
+            <Card className="shadow-card border-card-border">
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Target className="w-5 h-5 text-primary" />
+                  Attribute Analysis
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={attributesChartData}>
+                    <CartesianGrid strokeDasharray="3 3" className="opacity-30" />
+                    <XAxis dataKey="name" className="text-xs" />
+                    <YAxis className="text-xs" />
+                    <Tooltip 
+                      contentStyle={{
+                        backgroundColor: 'hsl(var(--card))',
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: '8px'
+                      }}
+                    />
+                    <Bar dataKey="frequency" fill="hsl(var(--primary))" radius={[4, 4, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {transformedData.attributes.map((attribute, index) => (
+                <Card key={index} className="shadow-card border-card-border">
+                  <CardHeader>
+                    <CardTitle className="text-lg">{attribute.attribute}</CardTitle>
+                    <Badge className={`w-fit ${
+                      attribute.importance === 'High' ? 'bg-green-500/10 text-green-700 border-green-200' :
+                      attribute.importance === 'Medium' ? 'bg-yellow-500/10 text-yellow-700 border-yellow-200' :
+                      'bg-red-500/10 text-red-700 border-red-200'
+                    }`}>
+                      {attribute.importance} Importance
+                    </Badge>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-3">{attribute.value}</p>
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs text-muted-foreground">Frequency:</span>
+                      <Badge variant="secondary">{attribute.frequency.toLocaleString()}</Badge>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="actions" className="space-y-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {transformedData.recommendedActions.map((action, index) => (
+                <Card key={index} className="shadow-card border-card-border">
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div>
+                        <CardTitle className="text-lg">{action.category}</CardTitle>
+                        <Badge className={getPriorityColor(action.priority)} variant="outline">
+                          {action.priority === 'High' && <AlertTriangle className="w-3 h-3 mr-1" />}
+                          {action.priority === 'Medium' && <Target className="w-3 h-3 mr-1" />}
+                          {action.priority === 'Low' && <CheckCircle className="w-3 h-3 mr-1" />}
+                          {action.priority} Priority
+                        </Badge>
+                      </div>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-muted-foreground mb-4">{action.action}</p>
+                    
+                    <div className="space-y-3">
+                      {action.impact && (
+                        <div>
+                          <p className="text-sm font-medium text-foreground mb-1">Expected Impact:</p>
+                          <p className="text-sm text-muted-foreground">{action.impact}</p>
+                        </div>
+                      )}
+                      
+                      {action.effort && (
+                        <div>
+                          <p className="text-sm font-medium text-foreground mb-1">Effort Required:</p>
+                          <Badge variant="secondary" className="text-xs">
+                            {action.effort}
+                          </Badge>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
           </TabsContent>
         </Tabs>
       </div>
     </div>
   );
-}
+};
+
+export default ProfessionalAnalytics;
