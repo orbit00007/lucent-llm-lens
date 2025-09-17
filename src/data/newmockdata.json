@@ -1,0 +1,343 @@
+{
+  "id": "tesla-ai-visibility-analysis-2024",
+  "type": "brand_intelligence",
+  "status": "completed",
+  "brand_name": "Tesla",
+  "analysis_keywords": ["electric vehicles", "autonomous driving", "sustainable energy"],
+  "created_at": "2024-03-15T14:30:00Z",
+  "updated_at": "2024-03-15T16:45:00Z",
+  
+  "Fold 1 - Overall Insights": {
+    "ai_visibility": "High",
+    "ai_sentiment": "Positive",
+    "ai_sentiment_label": "Industry leader in electric vehicles with strong innovation reputation",
+    "brand_mentions": {
+      "level": "High", 
+      "count": 28547
+    },
+    "ai_sentiment_summary": {
+      "positive": { "count": 18234, "level": "High", "percentage": 63.9 },
+      "neutral": { "count": 7892, "level": "Medium", "percentage": 27.6 },
+      "negative": { "count": 2421, "level": "Low", "percentage": 8.5 },
+      "most_prominent_sentiment": "Positive",
+      "most_prominent_level": "High",
+      "ai_insight_label": "Tesla is consistently positioned as an innovative market leader in electric vehicles and clean energy, though faces some criticism around pricing and service quality."
+    }
+  },
+
+  "Fold 2 - Source Performance Analysis": {
+    "sources": [
+      {
+        "source": "https://electrek.co",
+        "domain": "Electrek",
+        "frequency": 1247,
+        "relevance_score": 0.94,
+        "sentiment": "Positive",
+        "source_category": "Industry Publications"
+      },
+      {
+        "source": "https://www.reuters.com",
+        "domain": "Reuters", 
+        "frequency": 892,
+        "relevance_score": 0.91,
+        "sentiment": "Neutral",
+        "source_category": "News Media"
+      },
+      {
+        "source": "https://www.reddit.com/r/teslamotors",
+        "domain": "Reddit Tesla Community",
+        "frequency": 2134,
+        "relevance_score": 0.78,
+        "sentiment": "Positive",
+        "source_category": "Communities"
+      },
+      {
+        "source": "https://www.bloomberg.com",
+        "domain": "Bloomberg",
+        "frequency": 567,
+        "relevance_score": 0.89,
+        "sentiment": "Neutral",
+        "source_category": "Financial Media"
+      },
+      {
+        "source": "https://www.fool.com",
+        "domain": "Motley Fool",
+        "frequency": 423,
+        "relevance_score": 0.72,
+        "sentiment": "Positive",
+        "source_category": "Investment Analysis"
+      },
+      {
+        "source": "https://www.consumerreports.org",
+        "domain": "Consumer Reports",
+        "frequency": 189,
+        "relevance_score": 0.85,
+        "sentiment": "Negative",
+        "source_category": "Review Platforms"
+      }
+    ]
+  },
+
+  "Fold 3 - Competitor Analysis": {
+    "competitors": [
+      {
+        "brand_name": "Tesla",
+        "keyword": "electric vehicles",
+        "visibility_count": 28547,
+        "rank_position": 1
+      },
+      {
+        "brand_name": "BYD",
+        "keyword": "electric vehicles",
+        "visibility_count": 15230,
+        "rank_position": 2
+      },
+      {
+        "brand_name": "BMW",
+        "keyword": "electric vehicles", 
+        "visibility_count": 12890,
+        "rank_position": 3
+      },
+      {
+        "brand_name": "Volkswagen",
+        "keyword": "electric vehicles",
+        "visibility_count": 11420,
+        "rank_position": 4
+      },
+      {
+        "brand_name": "Ford",
+        "keyword": "electric vehicles",
+        "visibility_count": 9870,
+        "rank_position": 5
+      }
+    ],
+    "competitor_sentiment": [
+      {
+        "brand_name": "Tesla",
+        "sentiment_summary": "Category Leader",
+        "overall_sentiment_score": 8.4,
+        "key_phrases": ["pioneering electric technology", "market leader", "innovation driver"],
+        "sentiment_attributes": {
+          "Innovation": "Highly Positive",
+          "Pricing": "Neutral", 
+          "Security": "Positive",
+          "Support": "Negative",
+          "Community Engagement": "Positive"
+        }
+      },
+      {
+        "brand_name": "BYD", 
+        "sentiment_summary": "Strong Challenger",
+        "overall_sentiment_score": 7.1,
+        "key_phrases": ["affordable alternative", "rapid growth", "Chinese market leader"],
+        "sentiment_attributes": {
+          "Innovation": "Positive",
+          "Pricing": "Highly Positive",
+          "Security": "Neutral", 
+          "Support": "Neutral",
+          "Community Engagement": "Neutral"
+        }
+      },
+      {
+        "brand_name": "BMW",
+        "sentiment_summary": "Premium Player",
+        "overall_sentiment_score": 6.8,
+        "key_phrases": ["luxury electric vehicles", "traditional automaker transition", "premium quality"],
+        "sentiment_attributes": {
+          "Innovation": "Positive",
+          "Pricing": "Negative",
+          "Security": "Positive",
+          "Support": "Positive", 
+          "Community Engagement": "Neutral"
+        }
+      },
+      {
+        "brand_name": "Volkswagen",
+        "sentiment_summary": "Neutral",
+        "overall_sentiment_score": 5.9,
+        "key_phrases": ["mass market approach", "recovery from scandals", "ID series"],
+        "sentiment_attributes": {
+          "Innovation": "Neutral",
+          "Pricing": "Positive",
+          "Security": "Neutral",
+          "Support": "Neutral",
+          "Community Engagement": "Negative"
+        }
+      },
+      {
+        "brand_name": "Ford",
+        "sentiment_summary": "Cautious Entrant", 
+        "overall_sentiment_score": 5.7,
+        "key_phrases": ["F-150 Lightning success", "traditional brand", "conservative approach"],
+        "sentiment_attributes": {
+          "Innovation": "Neutral",
+          "Pricing": "Positive",
+          "Security": "Positive",
+          "Support": "Positive",
+          "Community Engagement": "Neutral"
+        }
+      }
+    ]
+  },
+
+  "Fold 4 - Content Impact": {
+    "categories": [
+      {
+        "category_name": "Analyst Platforms",
+        "visibility_level": "High",
+        "total_mentions": 3420,
+        "top_brands": [
+          { "brand": "Tesla", "mentions": 1890, "visibility": "High" },
+          { "brand": "BYD", "mentions": 890, "visibility": "Medium" },
+          { "brand": "BMW", "mentions": 640, "visibility": "Medium" }
+        ]
+      },
+      {
+        "category_name": "Review Platforms", 
+        "visibility_level": "High",
+        "total_mentions": 5670,
+        "top_brands": [
+          { "brand": "Tesla", "mentions": 2340, "visibility": "High" },
+          { "brand": "BMW", "mentions": 1560, "visibility": "High" },
+          { "brand": "Ford", "mentions": 1120, "visibility": "Medium" }
+        ]
+      },
+      {
+        "category_name": "Communities",
+        "visibility_level": "High", 
+        "total_mentions": 8920,
+        "top_brands": [
+          { "brand": "Tesla", "mentions": 4560, "visibility": "High" },
+          { "brand": "BYD", "mentions": 2180, "visibility": "Medium" },
+          { "brand": "Volkswagen", "mentions": 1340, "visibility": "Medium" }
+        ]
+      },
+      {
+        "category_name": "News Media",
+        "visibility_level": "High",
+        "total_mentions": 4230,
+        "top_brands": [
+          { "brand": "Tesla", "mentions": 2890, "visibility": "High" },
+          { "brand": "BYD", "mentions": 780, "visibility": "Medium" },
+          { "brand": "BMW", "mentions": 560, "visibility": "Low" }
+        ]
+      },
+      {
+        "category_name": "Owned Content",
+        "visibility_level": "Medium",
+        "total_mentions": 1890,
+        "top_brands": [
+          { "brand": "Tesla", "mentions": 890, "visibility": "High" },
+          { "brand": "Ford", "mentions": 450, "visibility": "Medium" },
+          { "brand": "BMW", "mentions": 320, "visibility": "Medium" }
+        ]
+      }
+    ],
+    "attributes_matrix": [
+      {
+        "attribute": "Innovation",
+        "value": "Technological advancement and breakthrough features",
+        "frequency": 8940,
+        "importance": "High",
+        "tesla_position": "Leader",
+        "competitor_average": 4120
+      },
+      {
+        "attribute": "Sustainability",
+        "value": "Environmental impact and green technology",
+        "frequency": 7230,
+        "importance": "High", 
+        "tesla_position": "Leader",
+        "competitor_average": 3890
+      },
+      {
+        "attribute": "Autonomous Driving",
+        "value": "Self-driving capabilities and AI integration",
+        "frequency": 5670,
+        "importance": "High",
+        "tesla_position": "Leader", 
+        "competitor_average": 2340
+      },
+      {
+        "attribute": "Pricing",
+        "value": "Cost competitiveness and value proposition",
+        "frequency": 4890,
+        "importance": "Medium",
+        "tesla_position": "Premium",
+        "competitor_average": 3120
+      },
+      {
+        "attribute": "Build Quality",
+        "value": "Manufacturing quality and reliability",
+        "frequency": 3420,
+        "importance": "Medium",
+        "tesla_position": "Mixed",
+        "competitor_average": 2890
+      },
+      {
+        "attribute": "Service Network",
+        "value": "Customer service and support infrastructure", 
+        "frequency": 2890,
+        "importance": "Medium",
+        "tesla_position": "Challenger",
+        "competitor_average": 3450
+      }
+    ]
+  },
+
+  "Fold 5 - Recommended Actions": {
+    "recommended_actions": [
+      {
+        "category": "AI Visibility Enhancement",
+        "priority": "High",
+        "action": "Increase presence in autonomous driving conversations by publishing more technical content about FSD capabilities and safety statistics.",
+        "impact": "Strengthens position as AI leader in automotive space and improves visibility for 'autonomous driving' keyword searches.",
+        "effort": "Medium",
+        "expected_visibility_increase": "15-20%",
+        "target_sources": ["Tech Publications", "AI Communities"]
+      },
+      {
+        "category": "Sentiment Improvement",
+        "priority": "High", 
+        "action": "Address service quality concerns through proactive content highlighting service improvements and expansion of service centers.",
+        "impact": "Reduces negative sentiment from 8.5% to target 5% while maintaining innovation leadership position.",
+        "effort": "High",
+        "expected_visibility_increase": "8-12%",
+        "target_sources": ["Review Platforms", "Consumer Communities"]
+      },
+      {
+        "category": "Competitive Positioning",
+        "priority": "Medium",
+        "action": "Create content comparing Tesla's charging infrastructure advantage over competitors to reinforce market leadership.",
+        "impact": "Maintains #1 visibility position and widens gap with competitors in 'electric vehicles' searches.",
+        "effort": "Low",
+        "expected_visibility_increase": "5-8%",
+        "target_sources": ["Analyst Platforms", "Owned Content"]
+      },
+      {
+        "category": "Market Education",
+        "priority": "Medium",
+        "action": "Develop educational content about sustainable energy ecosystem to capture 'sustainable energy' keyword visibility.",
+        "impact": "Expands brand visibility beyond automotive into broader clean energy conversations.",
+        "effort": "Medium", 
+        "expected_visibility_increase": "10-15%",
+        "target_sources": ["News Media", "Educational Platforms"]
+      },
+      {
+        "category": "Community Engagement",
+        "priority": "Low",
+        "action": "Increase official engagement in Tesla communities and forums to boost positive sentiment and visibility.",
+        "impact": "Improves community-driven content quality and reduces negative sentiment in discussion forums.",
+        "effort": "Low",
+        "expected_visibility_increase": "3-5%", 
+        "target_sources": ["Communities", "Social Platforms"]
+      }
+    ],
+    "visibility_forecast": {
+      "current_score": 8.4,
+      "potential_score": 9.2,
+      "timeline": "6-12 months",
+      "confidence": "High"
+    }
+  }
+}
